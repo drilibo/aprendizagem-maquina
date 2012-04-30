@@ -44,21 +44,23 @@ function [ selecao, selecao1, selecao2] = HMN( data, eps, hmnop)
         selecao1 = HMNE(data, dataPorClass, misses, hits, qntClass, eps);
     end
     if(hmnop == 3 || hmnop == 4)
-        selecao2 = HMNE(data, dataPorClass, misses, hits, qntClass, eps);
-        taxaAcerto = NN1(data, selecao2);
-        for a=1:5,
+        if(hmnop == 3)
+            selecao2 = HMNE(data, dataPorClass, misses, hits, qntClass, eps);
+        else
+            selecao2 = selecao1;
+        end
+        taxaAcerto = NN1(selecao2, data);
+        while (true)
             [~, selecaoaux, ~] = HMN(selecao2, eps, 2);
-            taxaAcertoaux = NN1(data, selecaoaux);
-            if taxaAcerto >= taxaAcertoaux,
+            taxaAcertoaux = NN1(selecaoaux, data);
+            disp([num2str(taxaAcerto) ' vs ' num2str(taxaAcertoaux)]);
+            if (taxaAcerto > taxaAcertoaux || all(size(selecao2,1) == size(selecaoaux,1)))
                 break;
             end
             selecao2 = selecaoaux;
             taxaAcerto = taxaAcertoaux;
         end
     end
-    
-    
-    
 end
 
 function selecao1 = HMNE(data, dataPorClass, misses, hits, qntClass, eps)
