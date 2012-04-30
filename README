@@ -1,1 +1,44 @@
-testando!
+HMN_CE_fast.m is the main program.
+It performs CV runs of the following algorithms on the selected dataset:
+1-NN 
+HMN-E, HMN-C, 1-NN (OTHER = 1 in code to select this algorithm and 1-NN), 
+HMN-EI (prova = 1), 
+Wilson (Wil = 1), 
+ICF (ICF_t = 1), 
+DROP3 (drop3 = 1) 
+
+
+To select a dataset set the corresponding variable to 1, 
+for instance with irisd = 1; you will use the iris dataset
+
+The variable more_runs is used to specify if full CV will be performed (more_runs =1) or only one run (more_runs = 0)
+
+results of HMN_CE_fast (accuracy and %removed ) are in the following variables
+
+
+tot_nn (1-nn)
+tot_hmnedit tot_red (HMN-E)
+tot_hmn tot_r (HMN-C)
+tot_nnicf tot_ricf (ICF)
+tot_wil tot_rwil (Wilson)
+tot_nndrop tot_rdrop (DROP3)
+tot_hmn1 tot_rhmn1 (HMN-EI)
+
+
+-----------
+Other files are:
+
+ load_selected_data.m: load selected dataset, uses data in directory DATA!!
+ Repeated_ENN_fast.m: Wilson editing algorithm
+ NN1cl.m: computes 1-NN
+ KNN.m: generic computes K-NN
+ ICF_fast.m: ICF algorithm
+ call_function_hmn1.m: used in main as part of HMNE
+ HMN_construct_fast.m: constructs HMN of dataset
+ HMN_remedit.m 
+ call_function_hmn_edit.m
+ plot_hm_2d.m: plot hmn graph for 2d input data
+ call_function_drop3.m: part of drop3 algorithm
+ ENN.m: part of Wilson method
+ step2_drop3.m: part of drop3 algorithm
+ plot_removed_alg.m: plot  data with remaining points highlighted
