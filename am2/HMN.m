@@ -58,8 +58,8 @@ function [ selecao, selecao1, selecao2] = HMN( data, eps, hmnop)
         while (true)
             [~, selecaoaux, ~] = HMN(selecao2, eps, 2);
             taxaAcertoaux = NN1(selecaoaux, data);
-            nossadiminuicao = size(selecao2,1)-size(selecaoaux,1);
-            nossadiminuicao
+            %nossadiminuicao = size(selecao2,1)-size(selecaoaux,1);
+            %nossadiminuicao
             if ini>1 && (taxaAcerto > taxaAcertoaux || all(size(selecao2,1) == size(selecaoaux,1)))
                 break;
             end
@@ -67,7 +67,7 @@ function [ selecao, selecao1, selecao2] = HMN( data, eps, hmnop)
             selecao2 = selecaoaux;
             taxaAcerto = taxaAcertoaux;
         end
-        disp(['Iteracoes do nosso: ' num2str(ini)]);
+       % disp(['Iteracoes do nosso: ' num2str(ini)]);
     end
 end
 
