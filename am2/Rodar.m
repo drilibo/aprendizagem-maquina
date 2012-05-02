@@ -1,14 +1,39 @@
 function Rodar(trainData, testeData)
-[selecaoHMNC, selecaoHMNE, selecaoHMNEI] = HMN(trainData, 0.1, 4);
-total = size(trainData,1);
-taxaAcerto = NN1(selecaoHMNC, testeData);
-reducao = 1 - size(selecaoHMNC,1)/total;
-disp([num2str(taxaAcerto) ' acerto, ' num2str(reducao) ' reducao']);
+    difClasses = unique( [trainData(:, end); testeData(:,end)] );
+    ate = size(difClasses, 1);
+    qntTrain = size(trainData, 1);
+    qntTest = size(testeData,1);
 
-taxaAcerto = NN1(selecaoHMNE, testeData);
-reducao = 1 - size(selecaoHMNE,1)/total;
-disp([num2str(taxaAcerto) ' acerto, ' num2str(reducao) ' reducao']);
+    for i = 1:qntTrain,
+        for j = 1: ate,
+            if trainData(i, end) == difClasses(j),
+                trainData(i, end) = j;
+                break;
+            end
+        end
+    end
 
-taxaAcerto = NN1(selecaoHMNEI, testeData);
-reducao = 1 - size(selecaoHMNEI,1)/total;
-disp([num2str(taxaAcerto) ' acerto, ' num2str(reducao) ' reducao']);
+    for i = 1:qntTest,
+        for j = 1: ate,
+            if testeData(i, end) == difClasses(j),
+                testeData(i, end) = j;
+                break;
+            end
+        end
+    end
+
+    [selecaoHMNC, selecaoHMNE, selecaoHMNEI] = HMN(trainData, 0.1, 4);
+    total = size(trainData,1);
+    taxaAcerto = NN1(selecaoHMNC, testeData);
+    reducao = 1 - size(selecaoHMNC,1)/total;
+    disp([num2str(taxaAcerto) ' acerto, ' num2str(reducao) ' reducao']);
+
+    taxaAcerto = NN1(selecaoHMNE, testeData);
+    reducao = 1 - size(selecaoHMNE,1)/total;
+    disp([num2str(taxaAcerto) ' acerto, ' num2str(reducao) ' reducao']);
+
+    taxaAcerto = NN1(selecaoHMNEI, testeData);
+    reducao = 1 - size(selecaoHMNEI,1)/total;
+    disp([num2str(taxaAcerto) ' acerto, ' num2str(reducao) ' reducao']);
+
+end
