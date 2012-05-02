@@ -109,8 +109,8 @@ Ededit = TRAIN(:,seledit);
 [neig, erp, ern, Missedit] = NN1cl(Ededit,TRAIN_CL(seledit),TEST,TEST_CL);
 [neig1, erp1, ern1, Miss1] = NN1cl(TRAIN,TRAIN_CL,TEST,TEST_CL);
 
-Miss1
-Missedit 
+Miss1;
+Missedit ;
 
 
 

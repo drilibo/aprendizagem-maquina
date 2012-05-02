@@ -16,15 +16,17 @@ function [ selecao, selecao1, selecao2] = HMN( data, eps, hmnop)
         ate1 = size(dataPorClass{c1}, 1);
         for c2=1:qntClass,
             ate2 = size(dataPorClass{c2}, 1);
-            for i=1:ate1,
-                dists = sum((repmat(dataPorClass{c1}(i,:), ate2, 1) - dataPorClass{c2}).^2, 2);
-                if(c1 == c2)
-                    dists(i) = 1e20;
-                    [~, a] = min(dists);
-                    hits{c1}(a) = hits{c1}(a) + 1;
-                else
-                    [~, a] = min(dists);
-                    misses{c2}(a) = misses{c2}(a) + 1;
+            if(ate2)
+                for i=1:ate1,
+                    dists = sum((repmat(dataPorClass{c1}(i,:), ate2, 1) - dataPorClass{c2}).^2, 2);
+                    if(c1 == c2)
+                        dists(i) = 1e20;
+                        [~, a] = min(dists);
+                        hits{c1}(a) = hits{c1}(a) + 1;
+                    else
+                        [~, a] = min(dists);
+                        misses{c2}(a) = misses{c2}(a) + 1;
+                    end
                 end
             end
         end
@@ -56,7 +58,8 @@ function [ selecao, selecao1, selecao2] = HMN( data, eps, hmnop)
         while (true)
             [~, selecaoaux, ~] = HMN(selecao2, eps, 2);
             taxaAcertoaux = NN1(selecaoaux, data);
-            %disp([num2str(taxaAcerto) ' vs ' num2str(taxaAcertoaux)]);
+            nossadiminuicao = size(selecao2,1)-size(selecaoaux,1);
+            nossadiminuicao
             if ini>1 && (taxaAcerto > taxaAcertoaux || all(size(selecao2,1) == size(selecaoaux,1)))
                 break;
             end
@@ -64,6 +67,7 @@ function [ selecao, selecao1, selecao2] = HMN( data, eps, hmnop)
             selecao2 = selecaoaux;
             taxaAcerto = taxaAcertoaux;
         end
+        disp(['Iteracoes do nosso: ' num2str(ini)]);
     end
 end
 

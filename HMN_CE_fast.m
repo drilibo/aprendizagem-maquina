@@ -101,7 +101,7 @@ tot_icf_iter = [];
 
 
 
-%permu = randperm(10);
+permu = randperm(10);
 
 
 for K=1:n_runs
@@ -230,11 +230,11 @@ for K=1:n_runs
             iter_hmn1 = [iter_hmn1 prog-1];
             
             freq_tolti1 = freq_tolti;
-            
             [S_h1, seledit3, Missedit3] = call_function_hmn1(T2, TEST, L2,TEST_CL, Dist2);
             
             
-            
+            %tam = size(L2);
+            %tam
             tmp_sel = sel_so_far(S_h1(seledit3));
             Ltmp = TRAIN_CL(tmp_sel);
             Ttmp = TRAIN(:, tmp_sel );
@@ -247,7 +247,8 @@ for K=1:n_runs
             
             
             freq_tolti = length(Miss_tr);
-            
+            %diminuicao = length(sel_so_far) - length(seledit3);
+            %diminuicao
             progress = ((length(seledit3) < length(sel_so_far) && freq_tolti<= freq_tolti1 ) | prog ==2);
             
             if progress
@@ -258,7 +259,7 @@ for K=1:n_runs
             end;
             
         end; %while progress
-        
+        %disp(['iteracoes hmn-ei dela: ' num2str(prog-1)]);
         tot_hmn1 = [tot_hmn1 (ntest - length(Miss_hmn_iter))/ntest];
         
         tot_rhmn1 = [tot_rhmn1 size(setdiff(1:length(TRAIN_CL),sel_so_far)',1)/length(TRAIN_CL)];
@@ -337,7 +338,7 @@ for K=1:n_runs
     end;
     %%%%%%%%%END DROP3
     
-    cd am
+    cd am2
     Rodar([TRAIN' TRAIN_CL], [TEST' TEST_CL]);
     cd ..
     
