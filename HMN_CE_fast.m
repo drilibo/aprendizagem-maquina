@@ -249,7 +249,6 @@ for K=1:n_runs
     OTHER=0;
     [~, ~, ~, Miss1] = NN1cl(TRAIN,TRAIN_CL,TEST,TEST_CL);
      nd = length(TRAIN_CL);
-        %size(setdiff(1:nd,sel)',1)/nd;
         
         ntest = length(TEST_CL);
         
@@ -259,7 +258,7 @@ for K=1:n_runs
         [SO,sel, seledit, Miss, Miss1, Missedit] =call_function_hmn_edit(TRAIN, TEST, TRAIN_CL,TEST_CL, DistM);
         
         
-        
+        %size(setdiff(1:nd,sel)',1)/nd;
         %[err, Miss ] = KNN(TRAIN, TRAIN_CL,TEST, TEST_CL,5 );
         
         %[err, Miss1 ] = KNN(TRAIN(:,sel), TRAIN_CL(sel),TEST, TEST_CL,5 );
@@ -359,7 +358,7 @@ end;
 
 
 %esse debaixo eh pra colar mais facil na planilha
-%disp(['HMN-C,E,EI: ' num2str(mean(tot_nn)) '	0	' num2str(tot(1)/K) '	' num2str(totr(1)/K) '	' num2str(tot(2)/K) '	' num2str(totr(2)/K) '	' num2str(tot(3)/K) '	' num2str(totr(3)/K) '	' num2str(mean(tot_nnicf)) '	' num2str(mean(tot_ricf)) '	' num2str(mean(tot_wil)) '	' num2str(mean(tot_rwil)) '	' num2str(mean(tot_nndrop)) '	' num2str(mean(tot_rdrop))]);
+disp(['HMN-C,E,EI: ' num2str(mean(tot_nn)) '	0	' num2str(tot(1)/K) '	' num2str(totr(1)/K) '	' num2str(tot(2)/K) '	' num2str(totr(2)/K) '	' num2str(tot(3)/K) '	' num2str(totr(3)/K) '	' num2str(mean(tot_nnicf)) '	' num2str(mean(tot_ricf)) '	' num2str(mean(tot_wil)) '	' num2str(mean(tot_rwil)) '	' num2str(mean(tot_nndrop)) '	' num2str(mean(tot_rdrop))]);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
     disp('     1-NN     ICF       E-NN       DROP3');

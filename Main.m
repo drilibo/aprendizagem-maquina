@@ -1,5 +1,5 @@
-more_runs = 1;%0~1
-grupo = 4; %1~4
+more_runs = 0;%0~1
+grupo = 1; %1~4
 
 irisd = 0;
 wbreastc = 0;
@@ -123,4 +123,3 @@ else
 end
     
     
-clear;

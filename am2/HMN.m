@@ -58,8 +58,6 @@ function [ selecao, selecao1, selecao2] = HMN( data, eps, hmnop)
         while (true)
             [~, selecaoaux, ~] = HMN(selecao2, eps, 2);
             taxaAcertoaux = NN1(selecaoaux, data);
-            %nossadiminuicao = size(selecao2,1)-size(selecaoaux,1);
-            %nossadiminuicao
             if ini>1 && (taxaAcerto > taxaAcertoaux || all(size(selecao2,1) == size(selecaoaux,1)))
                 break;
             end
@@ -67,7 +65,6 @@ function [ selecao, selecao1, selecao2] = HMN( data, eps, hmnop)
             selecao2 = selecaoaux;
             taxaAcerto = taxaAcertoaux;
         end
-       % disp(['Iteracoes do nosso: ' num2str(ini)]);
     end
 end
 
@@ -80,7 +77,7 @@ function selecao1 = HMNE(data, dataPorClass, misses, hits, qntClass, eps)
         selecionados{c} = zeros(size(dataPorClass{c}, 1), 1);
         left(c) = size(dataPorClass{c}, 1);
     end
-    for c=1:qntClass,
+    for c=1:qntClass, %regra 1
         ate = size(dataPorClass{c}, 1);
         wl = ate/size(data, 1);
         for i=1:ate,
@@ -91,7 +88,7 @@ function selecao1 = HMNE(data, dataPorClass, misses, hits, qntClass, eps)
             end
         end
     end
-    for c=1:qntClass,
+    for c=1:qntClass, %regra 2
         if(left(c) < 4)
             qnt = size(dataPorClass{c}, 1);
             for i=1:qnt,
@@ -102,11 +99,11 @@ function selecao1 = HMNE(data, dataPorClass, misses, hits, qntClass, eps)
             end
         end
     end
-    for c=1:qntClass,
+    for c=1:qntClass, %regra 3 e 4
         ate = size(dataPorClass{c}, 1);
         for i=1:ate,
             if selecionados{c}(i) == 0,
-                if qntClass > 3 && misses{c}(i) < c/2 && misses{c}(i)+hits{c}(i) > 0,
+                if qntClass > 3 && misses{c}(i) < qntClass/2 && misses{c}(i)+hits{c}(i) > 0,
                     selecionados{c}(i) = 1;
                     selecao1 = [selecao1; dataPorClass{c}(i, :), c];
                 elseif hits{c}(i) >= ate/4,
