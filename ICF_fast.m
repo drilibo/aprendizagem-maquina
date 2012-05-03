@@ -18,7 +18,7 @@ while progress==1
 temp = reachable - coverage;
  R = find(temp < 0);
 R1 = union(R,R1);
-length(R)
+length(R);
 progress = (length(R)>0);
 pippo(R1) = 0;
 nr_iter = nr_iter+1;

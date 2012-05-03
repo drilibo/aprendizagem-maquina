@@ -1,6 +1,4 @@
-clear;
 format short;
-more_runs = 0;
 tic
 
 %%%%READ DATA
@@ -32,32 +30,7 @@ gen_easy = 0;
 gen_easy1 = 0;
 no_cons = 0;
 
-irisd = 1;
-wbreastc = 0;
-bupad = 0;
-diabete = 0;
 
-%%Datasets http://theoval.sys.uea.ac.uk/matlab/default.html#benchmarks
-banana1 = 0;
-breast_cancer1 = 0;
-diabetis1 = 0;
-heart1 = 0;
-flare_solar1 = 0;%d
-german1 = 0;
-splice1 = 0; %nruns=20
-im1 = 0; %image nruns=20
-ringnorm1 = 0;
-twonorm1 = 0;
-thyroid1 = 0;
-titanic1 = 0;
-waveform1 = 0;
-
-%%Datasets http://www.kyb.tuebingen.mpg.de/bs/people/chapelle/lds/
-coil20 = 0;
-textdata = 0;
-g50 = 0;
-g10 = 0;
-usps = 0;
 
 
 
@@ -65,13 +38,13 @@ usps = 0;
 
 
 if more_runs
-    n_runs = 100;
+    n_runs = 10;
 else
     n_runs = 1;
 end;
 
 if (im1 || splice1) && more_runs
-    n_runs = 20;
+    n_runs = 10;
 end;
 
 tot_nndrop = [];
@@ -103,10 +76,11 @@ tot_icf_iter = [];
 
 permu = randperm(10);
 
-
+tot = zeros(3,1);
+totr = zeros(3,1);
 for K=1:n_runs
     
-    K
+    K;
     
     %%%%%%%%%load dataset
     
@@ -186,7 +160,7 @@ for K=1:n_runs
     end;
     
     
-    prova = 1;
+    prova = 0;
     if prova
         
         [S_h1, seledit1, Missedit1] = call_function_hmn1(TRAIN, TEST, TRAIN_CL,TEST_CL, DistM);
@@ -272,7 +246,14 @@ for K=1:n_runs
         
     end;
     
-    OTHER=1;
+    OTHER=0;
+    [~, ~, ~, Miss1] = NN1cl(TRAIN,TRAIN_CL,TEST,TEST_CL);
+     nd = length(TRAIN_CL);
+        %size(setdiff(1:nd,sel)',1)/nd;
+        
+        ntest = length(TEST_CL);
+        
+        tot_nn = [tot_nn  (ntest - length(Miss1))/ntest];
     if OTHER
         
         [SO,sel, seledit, Miss, Miss1, Missedit] =call_function_hmn_edit(TRAIN, TEST, TRAIN_CL,TEST_CL, DistM);
@@ -285,17 +266,11 @@ for K=1:n_runs
         %[err, Missedit ] = KNN(TRAIN(:,seledit), TRAIN_CL(seledit),TEST, TEST_CL,5 );
         
         
-        nd = length(TRAIN_CL);
-        %size(setdiff(1:nd,sel)',1)/nd;
-        
-        ntest = length(TEST_CL);
-        
-        tot_nn = [tot_nn  (ntest - length(Miss1))/ntest];
-        
+       
         tot_hmn = [tot_hmn (ntest - length(Miss))/ntest];
         
         
-        tot_r = [tot_r size(setdiff(1:length(TRAIN_CL),sel)',1)/length(TRAIN_CL) ];
+        
         
         tot_hmnedit = [tot_hmnedit (ntest - length(Missedit))/ntest];
         tot_red = [tot_red size(setdiff(1:length(TRAIN_CL),seledit)',1)/length(TRAIN_CL) ];
@@ -339,15 +314,18 @@ for K=1:n_runs
     %%%%%%%%%END DROP3
     
     cd am2
-    Rodar([TRAIN' TRAIN_CL], [TEST' TEST_CL]);
+    [tot, totr] = Rodar([TRAIN' TRAIN_CL], [TEST' TEST_CL], tot, totr);
     cd ..
     
 end; %for K
+disp(['HMN-C: ' num2str(tot(1)/K) ' acerto, ' num2str(totr(1)/K) ' reducao']);
+disp(['HMN-E: ' num2str(tot(2)/K) ' acerto, ' num2str(totr(2)/K) ' reducao']);
+disp(['HMN-EI: ' num2str(tot(3)/K) ' acerto, ' num2str(totr(3)/K) ' reducao']);
 
 if ICF_t
     
-    [mean(tot_nnicf)*100     mean(tot_ricf)*100]
-    mean(tot_icf_iter)
+    [mean(tot_nnicf)*100     mean(tot_ricf)*100];
+    mean(tot_icf_iter);
     
 end;
 
@@ -380,13 +358,14 @@ if altri_metodi
 end;
 
 
+%esse debaixo eh pra colar mais facil na planilha
+%disp(['HMN-C,E,EI: ' num2str(mean(tot_nn)) '	0	' num2str(tot(1)/K) '	' num2str(totr(1)/K) '	' num2str(tot(2)/K) '	' num2str(totr(2)/K) '	' num2str(tot(3)/K) '	' num2str(totr(3)/K) '	' num2str(mean(tot_nnicf)) '	' num2str(mean(tot_ricf)) '	' num2str(mean(tot_wil)) '	' num2str(mean(tot_rwil)) '	' num2str(mean(tot_nndrop)) '	' num2str(mean(tot_rdrop))]);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
-if 1
-    [ mean(tot_nn)  mean(tot_hmnedit) mean(tot_hmn) mean(tot_nnicf) mean(tot_wil) mean(tot_nndrop)  mean(tot_hmn1)]
+    disp('     1-NN     ICF       E-NN       DROP3');
+    [ mean(tot_nn) mean(tot_nnicf) mean(tot_wil) mean(tot_nndrop)  ];
     
-    [ 0 mean(tot_red) mean(tot_r) mean(tot_ricf) mean(tot_rwil) mean(tot_rdrop)  mean(tot_rhmn1)]
-end;
+    [ 0             mean(tot_ricf) mean(tot_rwil) mean(tot_rdrop)];
 
 compare_test = 0;
 %tot_nn tot_hmnedit tot_hmn tot_nnicf tot_wil
