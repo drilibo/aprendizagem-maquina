@@ -1,9 +1,10 @@
-function [tot, totr] = Rodar(trainData, testeData, tot, totr)
+function [tot, totr] = Rodar(trainData, testeData)
     difClasses = unique( [trainData(:, end); testeData(:,end)] );
     ate = size(difClasses, 1);
     qntTrain = size(trainData, 1);
     qntTest = size(testeData,1);
-
+    tot = zeros(3,1);
+    totr = zeros(3,1);
     for i = 1:qntTrain,
         for j = 1: ate,
             if trainData(i, end) == difClasses(j),

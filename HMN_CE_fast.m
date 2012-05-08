@@ -38,11 +38,11 @@ tot_icf_iter = [];
 
 n_runs = min(max(1,n_runs), 10);
 permu = randperm(10);
-tot = zeros(3,1);
-totr = zeros(3,1);
+tot = [];
+totr = [];
 
 for K=1:n_runs
-    
+    fprintf('%d..', floor((K-1)*(100/n_runs)));
     novaBase = ecoli + segmentation + breastc;
     if(novaBase)
         cd am2
@@ -111,18 +111,23 @@ for K=1:n_runs
     
     cd am2
     %HMN-C, HMN-E, HMN-EI, e 1-NN
-    [tot, totr] = Rodar([TRAIN' TRAIN_CL], [TEST' TEST_CL], tot, totr);
+    [ret, retr] = Rodar([TRAIN' TRAIN_CL], [TEST' TEST_CL]);
+    tot = [tot ret];
+    totr = [totr retr];
     tot_nn = [tot_nn NN1([TRAIN' TRAIN_CL], [TEST' TEST_CL])];
     cd ..
     
 end; %for K
+fprintf('100\n');
 
-disp(['HMN-C: ' num2str(tot(1)/K) ' acerto, ' num2str(totr(1)/K) ' reducao']);
-disp(['HMN-E: ' num2str(tot(2)/K) ' acerto, ' num2str(totr(2)/K) ' reducao']);
-disp(['HMN-EI: ' num2str(tot(3)/K) ' acerto, ' num2str(totr(3)/K) ' reducao']);
 
-%esse eh pra colar mais facil na planilha
-%disp(['HMN-C,E,EI: ' num2str(mean(tot_nn)) '	0	' num2str(tot(1)/K) '	' num2str(totr(1)/K) '	' num2str(tot(2)/K) '	' num2str(totr(2)/K) '	' num2str(tot(3)/K) '	' num2str(totr(3)/K) '	' num2str(mean(tot_nnicf)) '	' num2str(mean(tot_ricf)) '	' num2str(mean(tot_wil)) '	' num2str(mean(tot_rwil)) '	' num2str(mean(tot_nndrop)) '	' num2str(mean(tot_rdrop))]);
+%disp(['HMN-C: ' num2str(mean(tot(1,:))) ' acerto, ' num2str(mean(totr(1,:))) ' reducao']);
+%disp(['HMN-E: ' num2str(mean(tot(2,:))) ' acerto, ' num2str(mean(totr(2,:))) ' reducao']);
+%disp(['HMN-EI: ' num2str(mean(tot(3,:))) ' acerto, ' num2str(mean(totr(3,:))) ' reducao']);
+
+%conjuntos totais de resultados para facil copypaste
+%[tot_nn; zeros(1,10); tot(1,:); totr(1,:); tot(2,:); totr(2,:); tot(3,:); totr(3,:); tot_nnicf; tot_ricf; tot_wil; tot_rwil; tot_nndrop; tot_rdrop]
+%disp(['HMN-C,E,EI: ' num2str(mean(tot_nn)) '	0	' num2str(mean(tot(1,:))) '	' num2str(mean(totr(1,:))) '	' num2str(mean(tot(2,:))) '	' num2str(mean(totr(2,:))) '	' num2str(mean(tot(3,:))) '	' num2str(mean(totr(3,:))) '	' num2str(mean(tot_nnicf)) '	' num2str(mean(tot_ricf)) '	' num2str(mean(tot_wil)) '	' num2str(mean(tot_rwil)) '	' num2str(mean(tot_nndrop)) '	' num2str(mean(tot_rdrop))]);
 
 %%%%%%%%%%%%formatar isso melhor, taxa de acerto e remoção de cada um dos outros
     %disp('     1-NN     ICF       E-NN       DROP3');
