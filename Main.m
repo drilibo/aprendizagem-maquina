@@ -1,12 +1,16 @@
-more_runs = 0;%0~1
+n_runs = 1; %1~10
 grupo = 1; %1~4
 
+%UCI
+ecoli = 0;
+segmentation = 0;
+breastc = 0;
 irisd = 0;
 wbreastc = 0;
 bupad = 0;
 diabete = 0;
 
-%%Datasets http://theoval.sys.uea.ac.uk/matlab/default.html#benchmarks
+%Raetsch
 banana1 = 0;
 breast_cancer1 = 0;
 diabetis1 = 0;
@@ -21,7 +25,7 @@ thyroid1 = 0;
 titanic1 = 0;
 waveform1 = 0;
 
-%%Datasets http://www.kyb.tuebingen.mpg.de/bs/people/chapelle/lds/
+%Chapelle
 coil20 = 0;
 textdata = 0;
 g50 = 0;
@@ -29,6 +33,14 @@ g10 = 0;
 usps = 0;
 
 if(grupo == 1)
+    disp('******** Base Ecoli **********');
+    ecoli = 1;
+    HMN_CE_fast;
+    ecoli = 0;
+    disp('******** Base Breastc **********');
+    breastc = 1;
+    HMN_CE_fast;
+    breastc = 0;
     disp('******** Base Iris **********');
     irisd = 1;
     HMN_CE_fast;
@@ -46,6 +58,10 @@ if(grupo == 1)
     HMN_CE_fast;
     diabete = 0;
 elseif(grupo == 2)
+    disp('******** Base Segmentation **********');
+    segmentation = 1;
+    HMN_CE_fast;
+    segmentation = 0;
     disp('******** Base Banana **********');
     banana1 = 1;
     HMN_CE_fast;
