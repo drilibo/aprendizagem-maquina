@@ -12,7 +12,7 @@ function [ mediasAcerto, ttestPorBaseAcerto, dadosFinaisAcerto, ...
     ttestPorBaseAcerto = zeros(qntbases, 7);
     ttestPorBaseRed = zeros(qntbases, 7);
     for i=1:qntbases,
-        resultados = dlmread(['am2/resultados/' nome_bases{i} '.txt'], ' ');
+        resultados = dlmread(['resultados/' nome_bases{i} '.txt'], ' ');
         resultados = resultados * 10;
         
         for j=1:7,
