@@ -66,8 +66,58 @@ function [ mediasAcerto, ttestPorBaseAcerto, dadosFinaisAcerto, ...
         
     end
     
+    % fazer tabela
+    fileID = fopen('tabela.txt', 'w');
+    for i=1:qntbases
+        fprintf(fileID,'%s\t', nome_bases{i});
+        for j=1:7,
+            if(ttestPorBaseAcerto(i, j) == 1)
+                fprintf(fileID,'%.1f +\t', mediasAcerto(i, j));
+            elseif(ttestPorBaseAcerto(i, j) == -1)
+                fprintf(fileID,'%.1f -\t', mediasAcerto(i, j));
+            else
+                fprintf(fileID,'%.1f\t', mediasAcerto(i, j));
+            end
+            if(ttestPorBaseRed(i, j) == 1)
+                fprintf(fileID,'%.1f +\t', mediasRed(i, j));
+            elseif(ttestPorBaseRed(i, j) == -1)
+                fprintf(fileID,'%.1f -\t', mediasRed(i, j));
+            else
+                fprintf(fileID,'%.1f\t', mediasRed(i, j));
+            end
+        end
+            fprintf(fileID,'\n');
+    end
     
-    
-    
+    fprintf(fileID,'Average\t');
+    for i=1:7,
+        fprintf(fileID,'%.1f\t%.1f\t', dadosFinaisAcerto(1, i), dadosFinaisRed(1, i));
+    end
+    fprintf(fileID,'\nMedian\t');
+    for i=1:7,
+        fprintf(fileID,'%.1f\t%.1f\t', dadosFinaisAcerto(2, i), dadosFinaisRed(2, i));
+    end
+    fprintf(fileID,'\nSig.+/-\t');
+    for i=1:7,
+        fprintf(fileID,'%d/%d\t%d/%d\t', dadosFinaisAcerto(3, i), dadosFinaisAcerto(4, i), dadosFinaisRed(3, i), dadosFinaisRed(4, i));
+    end
+    fprintf(fileID,'\nWilcoxon\t');
+    for i=1:7,
+        if(dadosFinaisAcerto(5, i) == 1)
+            fprintf(fileID,'+\t');
+        elseif(dadosFinaisAcerto(5, i) == -1)
+            fprintf(fileID,'-\t');
+        else
+            fprintf(fileID,'~\t');
+        end
+        if(dadosFinaisRed(5, i) == 1)
+            fprintf(fileID,'+\t');
+        elseif(dadosFinaisRed(5, i) == -1)
+            fprintf(fileID,'-\t');
+        else
+            fprintf(fileID,'~\t');
+        end
+    end
+    fprintf(fileID,'\n');
 end
 
