@@ -121,93 +121,16 @@ end; %for K
 fprintf('100\n');
 
 
-%disp(['HMN-C: ' num2str(mean(tot(1,:))) ' acerto, ' num2str(mean(totr(1,:))) ' reducao']);
-%disp(['HMN-E: ' num2str(mean(tot(2,:))) ' acerto, ' num2str(mean(totr(2,:))) ' reducao']);
-%disp(['HMN-EI: ' num2str(mean(tot(3,:))) ' acerto, ' num2str(mean(totr(3,:))) ' reducao']);
+disp(['HMN-C: ' num2str(mean(tot(1,:))) ' acerto, ' num2str(mean(totr(1,:))) ' reducao']);
+disp(['HMN-E: ' num2str(mean(tot(2,:))) ' acerto, ' num2str(mean(totr(2,:))) ' reducao']);
+disp(['HMN-EI: ' num2str(mean(tot(3,:))) ' acerto, ' num2str(mean(totr(3,:))) ' reducao']);
 
 %conjuntos totais de resultados para facil copypaste
-%[tot_nn; zeros(1,10); tot(1,:); totr(1,:); tot(2,:); totr(2,:); tot(3,:); totr(3,:); tot_nnicf; tot_ricf; tot_wil; tot_rwil; tot_nndrop; tot_rdrop]
-%disp(['HMN-C,E,EI: ' num2str(mean(tot_nn)) '	0	' num2str(mean(tot(1,:))) '	' num2str(mean(totr(1,:))) '	' num2str(mean(tot(2,:))) '	' num2str(mean(totr(2,:))) '	' num2str(mean(tot(3,:))) '	' num2str(mean(totr(3,:))) '	' num2str(mean(tot_nnicf)) '	' num2str(mean(tot_ricf)) '	' num2str(mean(tot_wil)) '	' num2str(mean(tot_rwil)) '	' num2str(mean(tot_nndrop)) '	' num2str(mean(tot_rdrop))]);
+[tot_nn; zeros(1,n_runs); tot(1,:); totr(1,:); tot(2,:); totr(2,:); tot(3,:); totr(3,:); tot_nnicf; tot_ricf; tot_wil; tot_rwil; tot_nndrop; tot_rdrop]
+disp(['HMN-C,E,EI: ' num2str(mean(tot_nn)) '	0	' num2str(mean(tot(1,:))) '	' num2str(mean(totr(1,:))) '	' num2str(mean(tot(2,:))) '	' num2str(mean(totr(2,:))) '	' num2str(mean(tot(3,:))) '	' num2str(mean(totr(3,:))) '	' num2str(mean(tot_nnicf)) '	' num2str(mean(tot_ricf)) '	' num2str(mean(tot_wil)) '	' num2str(mean(tot_rwil)) '	' num2str(mean(tot_nndrop)) '	' num2str(mean(tot_rdrop))]);
 
-%%%%%%%%%%%%formatar isso melhor, taxa de acerto e remoção de cada um dos outros
     %disp('     1-NN     ICF       E-NN       DROP3');
     %[mean(tot_nn) mean(tot_nnicf) mean(tot_wil) mean(tot_nndrop)]%acerto
     %[0             mean(tot_ricf) mean(tot_rwil) mean(tot_rdrop)]%remocao
 
-
-altri_metodi = 0;
-if altri_metodi
-    [mean(tot_nndrop)*100     mean(tot_rdrop)*100  mean(tot_hmn1)*100     mean(tot_rhmn1)*100  ]
-    [ std(tot_nndrop)*100  std(tot_rdrop)*100   std(tot_hmn1)*100   std(tot_rhmn1)*100 ]
-
-    tail = 'right';
-    alpha = 0.05;
-    x1 = tot_hmn1';
-    x2 =  tot_nndrop';
-    [ap,ah] =  signrank(x1,x2);
-    [aht,apt] =  ttest(x1,x2,alpha, tail);
-    
-    x1 = tot_rhmn1';
-    x2 =  tot_rdrop';
-    [rp,rh] =  signrank(x1,x2);
-    [rht,rpt] =  ttest(x1,x2,alpha, tail);
-    
-    [apt rpt aht rht]
-    
-    risultati = [
-        mean(tot_nndrop)*100     mean(tot_rdrop)*100  mean(tot_hmn1)*100     mean(tot_rhmn1)*100
-        std(tot_nndrop)*100  std(tot_rdrop)*100   std(tot_hmn1)*100   std(tot_rhmn1)*100
-        apt rpt aht rht];
-end;
-
-compare_test = 0;
-%tot_nn tot_hmnedit tot_hmn tot_nnicf tot_wil
-% no     tot_red     tot_r  tot_ricf tot_rwil
-if compare_test
-    alpha = 0.05;
-    tail = 'right';
-    %tail = 'left';
-    x1 = tot_hmnedit';
-    ALL = [tot_nn' tot_hmn' tot_nnicf' tot_wil'];
-    for i=1:4
-        x2 = ALL(:,i);
-        [h(i), p(i)] =  signrank(x1,x2);
-        [ht(i),pt(i)] =  ttest(x1,x2,alpha, tail);
-    end;
-    x1 = tot_red';
-    ALLR = [ tot_r' tot_ricf' tot_rwil'];
-    for i=1:3
-        x2 = ALLR(:,i);
-        [rh(i),rp(i)] =  signrank(x1,x2);
-        [rht(i),rpt(i)] =  ttest(x1,x2,alpha, tail);
-    end;
-end;
-
-do_stats = 0;
-if do_stats
-    r_wilcoxon = [h' p']
-    r_ttest = [ht' pt']
-    
-    r_wilcoxonR = [rh' rp']
-    r_ttestR  = [rht' rpt']
-    
-    r_Te = [tot_hmnedit' ALL];
-    r_TeR = [tot_red' ALLR];
-    save _results r_*;
-end;
-
-if 0
-    [mean(tot_nn)*100, std(tot_nn)*100  mean(tot_hmn)*100, std(tot_hmn)*100    mean(tot_r)*100, std(tot_r)*100]
-    [mean(tot_nn)*100, std(tot_nn)*100  mean(tot_hmne)*100, std(tot_hmne)*100    mean(tot_re)*100, std(tot_re)*100]
-    [mean(tot_nn)*100, std(tot_nn)*100  mean(tot_hmnedit)*100, std(tot_hmnedit)*100    mean(tot_red)*100, std(tot_red)*100  mean(tot_nnicf)*100 std(tot_nnicf)*100  mean(tot_ricf)*100 std(tot_ricf)*100]
-end;
-
-if 0
-    if K > 1
-        [mean(tot_nn)*100  std(tot_nn)*100    mean(tot_hmn)*100  std(tot_hmn)*100    mean(tot_r)*100, std(tot_r)*100  mean(tot_hmnedit)*100  std(tot_hmnedit)*100    mean(tot_red)*100 std(tot_red)*100 ]
-        [mean(tot_nnicf)*100 std(tot_nnicf)*100  mean(tot_ricf)*100 std(tot_ricf)*100  mean(tot_wil)*100 std(tot_wil)*100 mean(tot_rwil)*100 std(tot_rwil)*100]
-    else
-        [mean(tot_nn)*100     mean(tot_hmn)*100     mean(tot_r)*100   mean(tot_hmnedit)*100    mean(tot_red)*100  tot_nnicf*100  (tot_ricf)*100 (tot_wil)*100 (tot_rwil)*100]
-    end;
-end;
 toc
