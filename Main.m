@@ -1,4 +1,4 @@
-n_runs = 1; %1~10
+n_runs = 10; %1~10
 grupo = 1; %1~4
 
 %UCI
@@ -31,111 +31,113 @@ textdata = 0;
 g50 = 0;
 g10 = 0;
 usps = 0;
-
+tempohmn = 0;
+temporesto = 0;
 if(grupo == 1)
     disp('******** Base Ecoli **********');
     ecoli = 1;
-    HMN_CE_fast;
+    Executar;
     ecoli = 0;
     disp('******** Base Breastc **********');
     breastc = 1;
-    HMN_CE_fast;
+    Executar;
     breastc = 0;
     disp('******** Base Iris **********');
     irisd = 1;
-    HMN_CE_fast;
+    Executar;
     irisd = 0;
     disp('******** Base Wbreast **********');
     wbreastc = 1;
-    HMN_CE_fast;
+    Executar;
     wbreastc = 0;
     disp('******** Base Bupa **********');
     bupad = 1;
-    HMN_CE_fast;
+    Executar;
     bupad = 0;
     disp('******** Base Pima/Diabete **********');
     diabete = 1;
-    HMN_CE_fast;
+    Executar;
     diabete = 0;
 elseif(grupo == 2)
     disp('******** Base Segmentation **********');
     segmentation = 1;
-    HMN_CE_fast;
+    Executar;
     segmentation = 0;
     disp('******** Base Banana **********');
     banana1 = 1;
-    HMN_CE_fast;
+    Executar;
     banana1 = 0;
     disp('******** Base Breast Cancer **********');
     breast_cancer1 = 1;
-    HMN_CE_fast;
+    Executar;
     breast_cancer1 = 0;
     disp('******** Base Diabetis **********');
     diabetis1 = 1;
-    HMN_CE_fast;
+    Executar;
     diabetis1 = 0;
     disp('******** Base Heart **********');
     heart1 = 1;
-    HMN_CE_fast;
+    Executar;
     heart1 = 0;
     disp('******** Base Flare Solar **********');
     flare_solar1 = 1;
-    HMN_CE_fast;
+    Executar;
     flare_solar1 = 0;
     disp('******** Base German **********');
     german1 = 1;
-    HMN_CE_fast;
+    Executar;
     german1 = 0;
     disp('******** Base Splice **********');
     splice1 = 1;
-    HMN_CE_fast;
+    Executar;
     splice1 = 0;
 elseif(grupo == 3)
     disp('******** Base Image **********');
     im1 = 1;
-    HMN_CE_fast;
+    Executar;
     im1 = 0;
     disp('******** Base Ringnorm **********');
     ringnorm1 = 1;
-    HMN_CE_fast;
+    Executar;
     ringnorm1 = 0;
     disp('******** Base Twonorm **********');
     twonorm1 = 1;
-    HMN_CE_fast;
+    Executar;
     twonorm1 = 0;
     disp('******** Base Thyroid **********');
     thyroid1 = 1;
-    HMN_CE_fast;
+    Executar;
     thyroid1 = 0;
     disp('******** Base Titanic **********');
     titanic1 = 1;
-    HMN_CE_fast;
+    Executar;
     titanic1 = 0;
     disp('******** Base Waveform **********');
     waveform1 = 1;
-    HMN_CE_fast;
+    Executar;
     waveform1 = 0;
 else
     disp('******** Base Coil20 **********');
     coil20 = 1;
-    HMN_CE_fast;
+    Executar;
     coil20 = 0;
     disp('******** Base Textdata **********');
     textdata = 1;
-    HMN_CE_fast;
+    Executar;
     textdata = 0;
     disp('******** Base G50 **********');
     g50 = 1;
-    HMN_CE_fast;
+    Executar;
     g50 = 0;
     disp('******** Base G10 **********');
     g10 = 1;
-    HMN_CE_fast;
+    Executar;
     g10 = 0;
     disp('******** Base USPS **********');
     usps = 1;
-    HMN_CE_fast;
+    Executar;
     usps = 0;
 end
-    
+
+%a = {'banana', 'breast cancer', 'breastc', 'bupad', 'coil20', 'diabetis', 'ecoli', 'flare_solar', 'g10', 'g50', 'german', 'heart', 'image', 'irisd', 'pima', 'ringnorm', 'segmentation', 'splice', 'textdata', 'thyroid', 'titanic', 'twonorm', 'usps', 'waveform', 'wbreastc'}
     
