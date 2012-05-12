@@ -1,4 +1,13 @@
+%Esta funcao cria o grafo do HMN, contabilizando hits e misses de cada
+%vertice e guardando nos arrays de cells "hits" e "misses". Em seguida são
+%rodados os HMN-C, HMN-E, HMN-EI dependendo da opção passada: 
+%hmnop = 1 -> rodar apenas o HMN-C, apenas o output 'selecao' será usado
+%hmnop = 2 -> rodar apenas o HMN-E, apenas o output 'selecao1' será usado
+%hmnop = 3 -> rodar apenas o HMN-EI, apenas o output 'selecao2' será usado
+%hmnop = 4 -> Os três HMNs serão rodados e todos as três saídas estarão
+%preenchidas.
 function [ selecao, selecao1, selecao2] = HMN( data, eps, hmnop)
+    %inicialização de variáveis
     qntClass = max(data(:, end));
     qntTrain = size(data, 1);
     dataPorClass = cell(qntClass, 1);
@@ -11,7 +20,7 @@ function [ selecao, selecao1, selecao2] = HMN( data, eps, hmnop)
         hits{c} = zeros(size(dataPorClass{c}, 1), 1);
         misses{c} = zeros(size(dataPorClass{c}, 1), 1);
     end
-    
+    %construção do grafo
     for c1=1:qntClass,
         ate1 = size(dataPorClass{c1}, 1);
         for c2=1:qntClass,
@@ -31,6 +40,7 @@ function [ selecao, selecao1, selecao2] = HMN( data, eps, hmnop)
             end
         end
     end
+    %início das seleções
     selecao = [];
     selecao1 = [];
     selecao2 = [];
@@ -51,13 +61,20 @@ function [ selecao, selecao1, selecao2] = HMN( data, eps, hmnop)
         if(hmnop == 3)
             selecao2 = HMNE(data, dataPorClass, misses, hits, qntClass, eps);
         else
+            %reaproveita a primeira seleção do HMNE
             selecao2 = selecao1;
         end
         taxaAcerto = NN1(selecao2, data);
         ini = 1;
         while (true)
+            %o HMN-EI rechama o HMN pedindo apenas o resultado do HMN-E, é
+            %feita esta recursão pois há a necessidade de remontar o grafo
+            %para as instâncias escolhidas até então.
             [~, selecaoaux, ~] = HMN(selecao2, eps, 2);
             taxaAcertoaux = NN1(selecaoaux, data);
+            %É forçado a existir pelo menos uma iteração deste while, de acordo com a implementação
+            %da autora. Se a taxa de acerto tiver diminuido, ou tamanho da
+            %seleção não mudou, parar a execução.
             if ini>1 && (taxaAcerto > taxaAcertoaux || all(size(selecao2,1) == size(selecaoaux,1)))
                 break;
             end
@@ -68,8 +85,9 @@ function [ selecao, selecao1, selecao2] = HMN( data, eps, hmnop)
     end
 end
 
+%Esta é a implementação do pseudo-código apresentado no artigo para o HMN-E
 function selecao1 = HMNE(data, dataPorClass, misses, hits, qntClass, eps)
-
+    
     selecao1 = [];
     selecionados = cell(qntClass, 1);
     left = zeros(qntClass, 1);

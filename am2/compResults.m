@@ -1,3 +1,9 @@
+% Esta função recebe os nomes das bases as quais deve gerar os testes
+% estatísticos, estas bases devem ter um arquivo 'nomebase.txt' na pasta
+% /resultados. É importante que todas elas estejam lá, ou haverá erro de
+% execução.
+% Esta função retorna todos os resultados métricos, e também gera um
+% arquivo tabela.txt onde ficará toda a tabela utilizada no relatório.
 function [ mediasAcerto, ttestPorBaseAcerto, dadosFinaisAcerto, ...
     mediasRed, ttestPorBaseRed, dadosFinaisRed ] = compResults( nome_bases )
     qntbases = size(nome_bases, 2);
@@ -14,11 +20,18 @@ function [ mediasAcerto, ttestPorBaseAcerto, dadosFinaisAcerto, ...
     for i=1:qntbases,
         resultados = dlmread(['resultados/' nome_bases{i} '.txt'], ' ');
         resultados = resultados * 10;
+        % A matriz resultados contem 10 colunas e 14 linhas, cada algoritmo
+        % tem 2 linhas destas, uma representa a taxa de acerto e a outra a
+        % redução.
+        % As linhas do 1-NN são 1 e 2, HMN-C 3 e 4, HMN-E 5 e 6, HMN-EI 7 e
+        % 8, ICF 9 e 10, E-NN 11, 12 e DROP3 13 e 14
         
         for j=1:7,
             mediasAcerto(i, j) = sum(resultados(j*2 - 1, :));
             mediasRed(i, j) = sum(resultados(j*2, :));
         end
+        % Teste de t-Studente para cada um dos algoritmos comparando com
+        % HMN-EI
         for j=1:7,
             if j == 4,
                 continue;
@@ -30,17 +43,10 @@ function [ mediasAcerto, ttestPorBaseAcerto, dadosFinaisAcerto, ...
             ttestPorBaseRed(i, j) = resTRed + 2*(resTRed * (-1 * (mediasRed(i, j) > mediasRed(i, 4)) ));
         end
         
-        if 0,
-            tot_1nn(i, 1) = sum(resultados(1, :));      tot_1nn(i, 2) = sum(resultados(2, :));
-            tot_hmnc(i, 1) = sum(resultados(3, :));     tot_hmnc(i, 2) = sum(resultados(4, :));
-            tot_hmne(i, 1) = sum(resultados(5, :));     tot_hmne(i, 2) = sum(resultados(6, :));
-            tot_hmnei(i, 1) = sum(resultados(7, :));    tot_hmnei(i, 2) = sum(resultados(8, :));
-            tot_icf(i, 1) = sum(resultados(9, :));      tot_icf(i, 2) = sum(resultados(10, :));
-            tot_enn(i, 1) = sum(resultados(11, :));     tot_enn(i, 2) = sum(resultados(12, :));
-            tot_drop3(i, 1) = sum(resultados(13, :));   tot_drop3(i, 2) = sum(resultados(14, :));
-        end
     end
     
+    % Cálculo das médias, medianas, Wilcoxon e soma das "pontuações" no
+    % t-Student
     dadosFinaisAcerto = zeros(5, 7);
     dadosFinaisRed = zeros(5, 7);
     dadosFinaisAcerto(1, :) = mean(mediasAcerto);

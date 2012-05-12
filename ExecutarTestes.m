@@ -1,3 +1,6 @@
+% Este script foi inicialmente feito pela autora, o que fizemos foi retirar
+% partes dele, deixando apenas o carregamento das bases, o E-NN, ICF e DROP3
+% E adicionamos a execução de nossa implementação dos HMNs
 format short;
 tic
 alon = 0;
@@ -41,10 +44,14 @@ permu = randperm(10);
 tot = [];
 totr = [];
 
+% Para cada iteração, utilizamos 10
 for K=1:n_runs
+    %impressão para dar noção do quanto o processo andou
     fprintf('%d..', floor((K-1)*(100/n_runs)));
     novaBase = ecoli + segmentation + breastc;
     if(novaBase)
+        %Se alguma das bases que adicionamos estiver selecionada para teste
+        %fazemos o carregamento aqui
         cd am2
         [TRAIN,TEST] = carregarBase(ecoli, segmentation, permu(K));
         TRAIN_CL = TRAIN(:,end);
@@ -53,6 +60,7 @@ for K=1:n_runs
         TEST = TEST(:,1:end-1)';
         cd ..
     else
+        % As demais bases são carregadas pelo script da autora
         load_selected_data;
     end
     
@@ -125,8 +133,14 @@ disp(['HMN-C: ' num2str(mean(tot(1,:))) ' acerto, ' num2str(mean(totr(1,:))) ' r
 disp(['HMN-E: ' num2str(mean(tot(2,:))) ' acerto, ' num2str(mean(totr(2,:))) ' reducao']);
 disp(['HMN-EI: ' num2str(mean(tot(3,:))) ' acerto, ' num2str(mean(totr(3,:))) ' reducao']);
 
-%conjuntos totais de resultados para facil copypaste
-[tot_nn; zeros(1,n_runs); tot(1,:); totr(1,:); tot(2,:); totr(2,:); tot(3,:); totr(3,:); tot_nnicf; tot_ricf; tot_wil; tot_rwil; tot_nndrop; tot_rdrop]
+resultados = [tot_nn; zeros(1,n_runs); tot(1,:); totr(1,:); tot(2,:); totr(2,:); tot(3,:); totr(3,:); tot_nnicf; tot_ricf; tot_wil; tot_rwil; tot_nndrop; tot_rdrop];
+disp(resultados);
+
+%Os resultados dos algoritmos para cada iteração são guardados na pasta
+%am2/resultados
+dlmwrite(['am2/resultados/' nomebase '.txt'], resultados, ' ');
+
+
 disp(['HMN-C,E,EI: ' num2str(mean(tot_nn)) '	0	' num2str(mean(tot(1,:))) '	' num2str(mean(totr(1,:))) '	' num2str(mean(tot(2,:))) '	' num2str(mean(totr(2,:))) '	' num2str(mean(tot(3,:))) '	' num2str(mean(totr(3,:))) '	' num2str(mean(tot_nnicf)) '	' num2str(mean(tot_ricf)) '	' num2str(mean(tot_wil)) '	' num2str(mean(tot_rwil)) '	' num2str(mean(tot_nndrop)) '	' num2str(mean(tot_rdrop))]);
 
     %disp('     1-NN     ICF       E-NN       DROP3');
